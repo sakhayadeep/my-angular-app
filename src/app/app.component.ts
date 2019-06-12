@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {FormGroup, FormControl} from "@angular/forms"
+import { FormGroup, FormControl } from "@angular/forms";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
@@ -27,13 +28,26 @@ export class AppComponent {
     }
   ];
 
+  remoteData;
+
   userForm;
-  constructor(){
+
+  constructor(private http:HttpClient){
+
     this.userForm = new FormGroup({
       'name': new FormControl(),
       'age': new FormControl(),
       'email': new FormControl()
     });
+
+    this.http.get("https://5cdd0a92b22718001417c19d.mockapi.io/api/users").toPromise().then(
+    (response)=>{
+      this.remoteData = response;
+      console.log(this.remoteData[0]);
+    },(error)=>{
+      console.log(error);
+    });
+
   }
 
   formSubmit(){
